@@ -1,0 +1,83 @@
+.strength-meter {
+  background-color: var(--color-bg-grey);
+  margin-top: 24px;
+  border-radius: 12px;
+  padding: 12px 16px;
+
+  & p {
+    color: var(--color-secondary);
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & span {
+      font-size: var(--font-body);
+      font-weight: 600;
+      color: var(--color-text);
+    }
+  }
+}
+
+.strength-meter__indicator {
+  width: 100%;
+  height: 6px;
+  border-radius: 12px;
+  background: none;
+  background-color: #e2e2e2;
+
+  &::-webkit-meter-bar {
+    background-color: #e2e2e2;
+    border-radius: 12px;
+    height: 6px;
+    border: none;
+  }
+
+  &::-webkit-meter-optimum-value,
+  &::-webkit-meter-suboptimum-value,
+  &::-webkit-meter-even-less-good-value {
+    border-radius: 12px;
+  }
+
+  &[value="1"]::-webkit-meter-optimum-value {
+    background: var(--color-meter-red);
+  }
+  &[value="2"]::-webkit-meter-optimum-value {
+    background: var(--color-meter-red);
+  }
+  &[value="3"]::-webkit-meter-optimum-value {
+    background: var(--color-meter-yellow);
+  }
+  &[value="4"]::-webkit-meter-optimum-value {
+    background: var(--color-meter-green);
+  }
+
+  &[value="1"]::-moz-meter-bar {
+    background: var(--color-meter-red);
+  }
+  &[value="2"]::-moz-meter-bar {
+    background: var(--color-meter-red);
+  }
+  &[value="3"]::-moz-meter-bar {
+    background: var(--color-meter-yellow);
+  }
+  &[value="4"]::-moz-meter-bar {
+    background: var(--color-meter-green);
+  }
+}
+
+.meter__segments {
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+}
+
+.segment::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: -7px;
+  width: 7px;
+  height: 8px;
+  background-color: var(--color-bg-grey);
+}
