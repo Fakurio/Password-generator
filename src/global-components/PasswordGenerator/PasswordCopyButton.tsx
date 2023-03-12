@@ -6,7 +6,8 @@ const PasswordCopyButton: React.FC = () => {
   return (
     <>
       <button className="password-copy-button">
-        <img src={CopyIcon}></img>Copy Password
+        <img src={CopyIcon}></img>
+        <span>Copy Password</span>
       </button>
     </>
   );
