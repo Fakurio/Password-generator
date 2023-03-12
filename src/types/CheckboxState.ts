@@ -1,7 +1,7 @@
 type CheckboxState = {
   [key: string]: boolean;
-  upLetter: boolean;
-  lowLetter: boolean;
+  upperCase: boolean;
+  lowerCase: boolean;
   number: boolean;
   symbol: boolean;
 };

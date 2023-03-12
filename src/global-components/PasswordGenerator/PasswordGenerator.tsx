@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./PasswordGenerator.scss";
 import { CheckboxState } from "@/types/CheckboxState";
 import { PasswordStrength } from "@/types/PasswordStrength";
@@ -18,15 +18,17 @@ const PasswordGenerator: React.FC = () => {
   ];
 
   const [passwordOptions, setPasswordOptions] = useState<CheckboxState>({
-    upLetter: true,
-    lowLetter: false,
+    upperCase: true,
+    lowerCase: false,
     number: true,
     symbol: true,
   });
   const [passwordLength, setPasswordLength] = useState<number>(6);
-  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>(
-    passwordStrengthOptions[2]
-  );
+  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>({
+    strength: 0,
+    info: "",
+  });
+  const [password, setPassword] = useState<string>("");
 
   const handlePasswordOptionsChange = (value: string) => {
     setPasswordOptions({
@@ -38,6 +40,51 @@ const PasswordGenerator: React.FC = () => {
   const handlePasswordLengthChange = (length: number) => {
     setPasswordLength(length);
   };
+
+  const handlePasswordStrengthChange = () => {
+    let optionsCheckedNumber = 0;
+    // for (const [key, value] of Object.entries(passwordOptions)) {
+    //   if (value) optionsCheckedNumber++;
+    // }
+    for (const key in passwordOptions) {
+      if (passwordOptions[key]) optionsCheckedNumber++;
+    }
+
+    if (passwordLength >= 14 && optionsCheckedNumber === 4) {
+      setPasswordStrength(passwordStrengthOptions[3]);
+    } else if (passwordLength >= 10 && optionsCheckedNumber > 2) {
+      setPasswordStrength(passwordStrengthOptions[2]);
+    } else if (passwordLength >= 7 && optionsCheckedNumber >= 2) {
+      setPasswordStrength(passwordStrengthOptions[1]);
+    } else {
+      setPasswordStrength(passwordStrengthOptions[0]);
+    }
+  };
+
+  const generatePassword = () => {
+    const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const symbols = "!#$%^&*+-_/<>?=@[]~|";
+
+    let charset = "";
+    if (passwordOptions["upperCase"]) charset += upperCase;
+    if (passwordOptions["lowerCase"]) charset += lowerCase;
+    if (passwordOptions["number"]) charset += numbers;
+    if (passwordOptions["symbol"]) charset += symbols;
+
+    let password = "";
+    for (let i = 0; i < passwordLength; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+
+    setPassword(password);
+  };
+
+  useEffect(() => {
+    generatePassword();
+    handlePasswordStrengthChange();
+  }, [passwordLength, passwordOptions]);
 
   return (
     <div className="generator">
@@ -51,8 +98,11 @@ const PasswordGenerator: React.FC = () => {
         handleChange={handlePasswordOptionsChange}
       />
       <StrengthMeter passwordStrength={passwordStrength} />
-      <PasswordResultField />
-      <PasswordCopyButton />
+      <PasswordResultField
+        password={password}
+        generatePassword={generatePassword}
+      />
+      <PasswordCopyButton password={password} />
     </div>
   );
 };
